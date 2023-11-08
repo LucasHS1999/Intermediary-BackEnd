@@ -3,12 +3,15 @@ import { pkg } from "body- parser";
 import { router } from "./routes/router.js";
 import sequelize from "./utils/database.js";
 import association from "./models/Associations.js";
+import cors from "cors";
 
 const app = express();
 const { json, urlencoded } = pkg;
 
 app.user(json());
 app.use(urlencoded({ extended: true }));
+app.use("/", router);
+app.use(cors());
 
 (async () => {
   try {
@@ -21,5 +24,3 @@ app.use(urlencoded({ extended: true }));
     console.log(error);
   }
 })();
-
-app.use("/", router);

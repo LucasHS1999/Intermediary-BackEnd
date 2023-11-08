@@ -21,13 +21,13 @@
                     <tr *ngFor="let teacher of teachers">
                         <th scope="row">{{teacher.id}}</th>
                         <td>{{teacher.name}}</td>
-                        <td>{{getLabelCourse(teacher.course_id)}}</td>
+                        <td>{{teacher.course_id}}</td>
                         <td>
-                            <a class="btn btn-outline-primary" [href]="'/user?id='+user.id">
+                            <a class="btn btn-outline-primary" [href]="'/addTeacher?id='+teacher.id">
                                 <fa-icon [icon]="faPencil"></fa-icon>
                             </a>
                             <button type="button" class="btn btn-outline-danger" data-toggle="confirmation"
-                                data-placement="right" (click)="delete(user.id)">
+                                data-placement="right" (click)="delete(teacher.id)">
                                 <fa-icon [icon]="faTrash"></fa-icon>
                             </button>
                         </td>

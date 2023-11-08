@@ -1,5 +1,5 @@
 import { SharedService } from "./../../../shared/shared.service";
-import { Component } from "@angular/core";
+import { Component, OnInit } from "@angular/core";
 import { TeacherService } from "../teacher.service";
 import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
 
@@ -8,7 +8,7 @@ import { faPencil, faTrash } from "@fortawesome/free-solid-svg-icons";
   templateUrl: "./teacher-list.component.html",
   styleUrls: ["./teacher-list.component.scss"],
 })
-export class TeacherListComponent {
+export class TeacherListComponent implements OnInit {
   faPencil = faPencil;
   faTrash = faTrash;
 
@@ -21,11 +21,35 @@ export class TeacherListComponent {
   ) {}
 
   async ngOnInit(): Promise<void> {
-    this.courseLabel = await this.sharedService.convertCourseToOption();
+    await this.listTeachers();
+    this.sharedService
+      .getCourses()
+      .subscribe((course) => (this.courseLabel = course));
+  }
+
+  async listTeachers(): Promise<void> {
+    this.teachers = await this.teacherService.get<any[]>({
+      url: "http://localhost:3000/getAllTeachers",
+      params: {},
+    });
+  }
+
+  async delete(id: number): Promise<void> {
+    if (confirm("Deseja deletar este professor?")) {
+      await this.teacherService.delete<any>({
+        url: `http://localhost:3000/deleteTeacher/${id}`,
+        params: {},
+      });
+      await this.listTeachers();
+    }
   }
 
   getLabelCourse(value: String): String | undefined {
     let course = this.courseLabel.find((course) => course.value == value);
     return course?.label;
+  }
+
+  onConfirm(value: any) {
+    alert("Value:" + value);
   }
 }
